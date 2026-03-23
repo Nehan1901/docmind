@@ -1,0 +1,19 @@
+# Python
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+backend/chroma_db/
+backend/uploads/
+backend/docmind.db
+backend/.env
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Root venv
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
