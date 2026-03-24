@@ -413,7 +413,7 @@ export default function App({ user, onLogout }: AppProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [previewDoc, setPreviewDoc] = useState<string | null>(null)
-  
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
@@ -554,13 +554,13 @@ export default function App({ user, onLogout }: AppProps) {
       results.length > 0
         ? results
         : [
-            {
-              answer:
-                "No relevant information found across any uploaded documents.",
-              doc: "All Documents",
-              sources: [],
-            },
-          ],
+          {
+            answer:
+              "No relevant information found across any uploaded documents.",
+            doc: "All Documents",
+            sources: [],
+          },
+        ],
     );
     setSearching(false);
   };
@@ -674,8 +674,8 @@ export default function App({ user, onLogout }: AppProps) {
         input:focus{outline:none}
         .search-result{background:rgba(59,130,246,0.05);border:1px solid rgba(59,130,246,0.15);border-radius:14px;padding:20px;margin-bottom:16px}
         .doc-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.25);padding:5px 12px;border-radius:999px;margin-bottom:12px}
-        .doc-item:hover .preview-btn { opacity: 1 !important; }
-      `}</style>
+        .preview-btn:hover { background:rgba(59,130,246,0.2)!important; }      
+        `}</style>
 
       <div style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
         {/* ── SIDEBAR ── */}
