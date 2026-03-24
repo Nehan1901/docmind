@@ -97,6 +97,19 @@ async def upload_document(file: UploadFile = File(...)):
         "message": f"Successfully processed and embedded {file.filename}"
     }
 
+from fastapi.responses import FileResponse
+
+@app.get("/document/{filename}")
+async def get_document(filename: str):
+    file_path = UPLOAD_DIR / filename
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(
+        path=str(file_path),
+        media_type="application/pdf",
+        filename=filename
+    )
+
 @app.post("/query")
 def query_document(request: QueryRequest):
     try:
