@@ -254,16 +254,16 @@ npm run dev
 
 ---
 
-## 🧾 Resume Impact (Use This 🔥)
+<!-- ## 🧾 Resume Impact (Use This 🔥)
 
-> Built a production-grade AI document assistant using RAG architecture, enabling real-time question answering over PDFs with source citations. Implemented semantic search, OAuth authentication, and streaming responses using FastAPI, React, and Claude API.
+> Built a production-grade AI document assistant using RAG architecture, enabling real-time question answering over PDFs with source citations. Implemented semantic search, OAuth authentication, and streaming responses using FastAPI, React, and Claude API. -->
 
 ---
 
 ## 🔗 Links
 
 - 🌐 Live App: https://docmind-ebon.vercel.app  
-- ⚙️ Backend: https://docmind-production.up.railway.app  
+<!-- - ⚙️ Backend: https://docmind-production.up.railway.app   -->
 
 ---
 
