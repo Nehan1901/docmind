@@ -27,7 +27,7 @@
 ## 🎥 Demo
 
 <p align="center">
-  <img src="demo.gif" width="95%" />
+  <img src="docmind.gif" width="95%" />
 </p>
 
 ---
