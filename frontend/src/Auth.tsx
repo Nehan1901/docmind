@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import { PublicClientApplication } from "@azure/msal-browser";
 
-const API = "http://localhost:8000";
+const API = import.meta.env.VITE_API_URL || "http://localhost:8000";
 const GOOGLE_IDENTITY_SCRIPT = "https://accounts.google.com/gsi/client";
 
 interface User {
