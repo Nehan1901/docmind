@@ -24,24 +24,19 @@ load_dotenv()
 
 app = FastAPI(title="DocMind API")
 
-allowed_origins = os.getenv("ALLOWED_ORIGINS")
-if allowed_origins:
-    # comma-separated list in env var
-    origins = [o.strip() for o in allowed_origins.split(",") if o.strip()]
-else:
-    origins = [
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
         "https://docmind-ebon.vercel.app",
         "https://docmind-production.up.railway.app",
         "http://localhost:5173",
         "http://localhost:5174",
-    ]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
+    max_age=600,
 )
 
 
