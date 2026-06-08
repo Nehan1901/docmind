@@ -4,7 +4,6 @@ import axios from "axios";
 // const API = "docmind-production.up.railway.app";
 const API = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-
 interface Message {
   role: "user" | "ai";
   text: string;
