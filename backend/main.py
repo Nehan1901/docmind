@@ -28,7 +28,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://docmind-ebon.vercel.app",
-        "https://docmind-production.up.railway.app",
+        "https://docmindai.up.railway.app",
         "http://localhost:5173",
         "http://localhost:5174",
     ],
