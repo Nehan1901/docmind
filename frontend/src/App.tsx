@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import { createPortal } from "react-dom";
 import axios from "axios";
 
 // const API = "docmind-production.up.railway.app";
@@ -225,11 +226,18 @@ function ProfileDropdown({
   user,
   onLogout,
   onClose,
+  actions,
   T,
 }: {
   user: AppProps["user"];
   onLogout: () => void;
   onClose: () => void;
+  actions: {
+    onEdit: () => void;
+    onChangePassword: () => void;
+    onNotifications: () => void;
+    onHelp: () => void;
+  };
   T: ThemeTokens;
 }) {
   return (
@@ -307,14 +315,21 @@ function ProfileDropdown({
       </div>
       <div style={{ padding: "8px" }}>
         {[
-          { icon: "person", label: "Edit Profile" },
-          { icon: "key", label: "Change Password" },
-          { icon: "notifications", label: "Notifications" },
-          { icon: "help_outline", label: "Help & Support" },
+          { icon: "person", label: "Edit Profile", onClick: actions.onEdit },
+          { icon: "key", label: "Change Password", onClick: actions.onChangePassword },
+          { icon: "notifications", label: "Notifications", onClick: actions.onNotifications },
+          { icon: "help_outline", label: "Help & Support", onClick: actions.onHelp },
         ].map((item) => (
           <button
             key={item.label}
-            onClick={onClose}
+            onClick={() => {
+              try {
+                item.onClick();
+              } catch (e) {
+                console.error(e);
+              }
+              onClose();
+            }}
             style={{
               width: "100%",
               display: "flex",
@@ -1170,6 +1185,42 @@ export default function App({ user, onLogout }: AppProps) {
                   alignItems: "center",
                   gap: "14px",
                   whiteSpace: "nowrap",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  if (selectedDoc) {
+                    try {
+                      const toSave = messages.map((m) => ({
+                        ...m,
+                        timestamp: m.timestamp.toISOString(),
+                      }));
+                      localStorage.setItem(`docmind_saved_${selectedDoc}`, JSON.stringify(toSave));
+                    } catch (e) {
+                      console.error("Failed to save conversation locally:", e);
+                    }
+                  }
+                  setSelectedDoc(null);
+                  setMessages([]);
+                }}
+                title="Home — click to open empty view"
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    if (selectedDoc) {
+                      try {
+                        const toSave = messages.map((m) => ({
+                          ...m,
+                          timestamp: m.timestamp.toISOString(),
+                        }));
+                        localStorage.setItem(`docmind_saved_${selectedDoc}`, JSON.stringify(toSave));
+                      } catch (err) {
+                        console.error(err);
+                      }
+                    }
+                    setSelectedDoc(null);
+                    setMessages([]);
+                  }
                 }}
               >
                 <div
@@ -1839,19 +1890,7 @@ export default function App({ user, onLogout }: AppProps) {
                 position: "relative",
               }}
             >
-              <button
-                className="icon-btn"
-                onClick={() => {
-                  setSidebarOpen(true)
-                  setActiveNav("library")
-                  setDocSearch("")
-                  setTimeout(() => docSearchRef.current?.focus(), 300)
-                }}
-                disabled={docs.length === 0}
-                title="Search documents"
-              >
-                <Icon name="manage_search" size={20} />
-              </button>
+              {/* search shortcut removed */}
               <button
                 className="icon-btn"
                 onClick={() => selectedDoc && setModal("docinfo")}
@@ -1899,16 +1938,47 @@ export default function App({ user, onLogout }: AppProps) {
               </div>
               {showProfile && (
                 <>
-                  <div
-                    onClick={() => setShowProfile(false)}
-                    style={{ position: "fixed", inset: 0, zIndex: 199 }}
-                  />
-                  <ProfileDropdown
-                    user={user}
-                    onLogout={handleLogout}
-                    onClose={() => setShowProfile(false)}
-                    T={T}
-                  />
+                  {typeof document !== "undefined" &&
+                    createPortal(
+                      <div
+                        onClick={() => setShowProfile(false)}
+                        style={{
+                          position: "fixed",
+                          inset: 0,
+                          zIndex: 9998,
+                          background: T.bodyOverlay,
+                          backdropFilter: "blur(2px)",
+                        }}
+                      />,
+                      document.body
+                    )}
+
+                  {typeof document !== "undefined" &&
+                    createPortal(
+                      <div style={{ position: "fixed", top: 12, right: 12, zIndex: 9999 }}>
+                        <ProfileDropdown
+                          user={user}
+                          onLogout={handleLogout}
+                          onClose={() => setShowProfile(false)}
+                          actions={{
+                            onEdit: () => {
+                              setModal("settings");
+                            },
+                            onChangePassword: () => {
+                              showToast("Change password not implemented", "info");
+                            },
+                            onNotifications: () => {
+                              setModal("settings");
+                            },
+                            onHelp: () => {
+                              setModal("help");
+                            },
+                          }}
+                          T={T}
+                        />
+                      </div>,
+                      document.body
+                    )}
                 </>
               )}
             </div>
